@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<script src="js/jquery-2.1.3.min.js"></script>
+<link rel="stylesheet" href="css/sample.css">
+<title>じゃんけん</title>
+</head>
+<body>
+<main>
+  <div class="container">
+    <h1>じゃんけんゲーム</h1>
+    <div id="game">
+      <div id="choices">
+        <button class="choice" id="グー">グー</button>
+        <button class="choice" id="パー">パー</button>
+        <button class="choice" id="チョキ">チョキ</button>
+      </div>
+      <div id="result">
+        <p id="result-text">じゃんけん...</p>
+      </div>
+    </div>
+
+    <div class="playtimes">
+      <p>ゲームプレイ回数</p>
+      <p id="playtimes">0回</p>
+    </div>
+    <div class="wintimes">
+      <p>勝った回数</p>
+      <p id="wintimes">0回</p>
+    </div>
+    <div class="winrate">
+      <p>勝率</p>
+      <p id="winrate">0%</p>
+    </div>
+  </div>
+</main>
+
+<footer></footer>
+<script>
+// グローバル変数
+  let userChoice = "";
+  let computerChoice = "";
+  let playtimes = 0;
+  let wintimes = 0;
+  let winningrate = 0;
+
+  // ユーザーが選んだ手を取得する関数
+  function getUserChoice(choice) {
+    userChoice = choice;
+    playGame();
+  }
+
+  // コンピューターの手をランダムに選ぶ関数
+  function getComputerChoice() {
+    const choices = ['グー', 'パー', 'チョキ'];
+    const randomChoice = Math.floor(Math.random() * 3);
+    return choices[randomChoice];
+  }
+
+  // じゃんけんのルールに基づいて結果を決定する関数
+  function determineWinner(user, computer) {
+    if (user === computer) {
+      return `コンピュータの選んだ手は${computer}です。結果は引き分けです！`;
+    } else if ((user === 'グー' && computer === 'チョキ') ||
+              (user === 'パー' && computer === 'グー') ||
+              (user === 'チョキ' && computer === 'パー')) {
+      wintimes = wintimes + 1;
+      return `コンピュータの選んだ手は${computer}です。結果はあなたの勝ちです！`;
+    } else {
+      return `コンピュータの選んだ手は${computer}です。結果はあなたの負けです！`;
+    }
+  }
+
+  // じゃんけんゲームをプレイする関数
+  function playGame() {
+    computerChoice = getComputerChoice();
+    const result = determineWinner(userChoice, computerChoice);
+    document.getElementById('result-text').textContent = result;
+    playtimes = playtimes + 1;
+    document.getElementById('playtimes').textContent = `${playtimes}回`;
+    document.getElementById('wintimes').textContent = `${wintimes}回`;
+    document.getElementById('winrate').textContent = `${Math.round(wintimes/playtimes*100)}%`;
+  }
+
+  // ボタンにイベントリスナーを追加する
+  document.getElementById('グー').addEventListener('click', function() {
+    getUserChoice('グー');
+  });
+  document.getElementById('パー').addEventListener('click', function() {
+    getUserChoice('パー');
+  });
+  document.getElementById('チョキ').addEventListener('click', function() {
+    getUserChoice('チョキ');
+  });
+</script>
+</body>
+</html>
